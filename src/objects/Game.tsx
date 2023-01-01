@@ -59,6 +59,28 @@ export default class Game {
 		this.items.push(new BulletItem(this, 200, 300));
 		this.items.push(new ChickenLeggItem(this, 300, 300));
 		this.items.push(new ChickenLeggItem(this, 250, 300));
+		this.player.collect(new ChickenLeggItem(this, 300, 300));
+		this.player.collect(new BulletItem(this, 300, 300));
+		this.player.collect(new ChickenLeggItem(this, 300, 300));
+		this.player.collect(new BulletItem(this, 300, 300));
+		this.player.collect(new ChickenLeggItem(this, 300, 300));
+		this.player.collect(new BulletItem(this, 300, 300));
+		this.player.collect(new ChickenLeggItem(this, 300, 300));
+		this.player.collect(new BulletItem(this, 300, 300));
+		this.player.collect(new ChickenLeggItem(this, 300, 300));
+		this.player.collect(new BulletItem(this, 300, 300));
+		this.player.collect(new ChickenLeggItem(this, 300, 300));
+		this.player.collect(new BulletItem(this, 300, 300));
+		this.player.collect(new ChickenLeggItem(this, 300, 300));
+		this.player.collect(new BulletItem(this, 300, 300));
+		this.player.collect(new ChickenLeggItem(this, 300, 300));
+		this.player.collect(new BulletItem(this, 300, 300));
+		this.player.collect(new ChickenLeggItem(this, 300, 300));
+		this.player.collect(new BulletItem(this, 300, 300));
+		this.player.collect(new ChickenLeggItem(this, 300, 300));
+		this.player.collect(new BulletItem(this, 300, 300));
+		this.player.collect(new ChickenLeggItem(this, 300, 300));
+		this.player.collect(new BulletItem(this, 300, 300));
 		this.draw();
 	}
 
