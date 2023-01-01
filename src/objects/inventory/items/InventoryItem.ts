@@ -38,6 +38,7 @@ export default class InventoryItem extends GameObject {
 		};
 		this.id = generateKey("inv");
 		this.effect = () => {};
+		// descrease amount of self and returns bool value that represents availability of this item
 		this.use = () => {
 			this.description.amount -= 1;
 			if (this.description.amount === 0) {
