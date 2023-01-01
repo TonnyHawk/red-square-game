@@ -13,6 +13,7 @@ export default class ChickenLeggItem extends InventoryItem {
 			text: "MMMhmhm juccy legg to feel great!",
 			tag: ["food"],
 			isLarge: true,
+			isUsable: true,
 		};
 		this.effect = (owner: Player) => {
 			const effectAmount = 20;
