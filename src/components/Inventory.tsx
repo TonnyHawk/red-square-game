@@ -157,15 +157,19 @@ const InventoryComponent = ({ isActive, inventory }: { isActive: boolean; invent
 						>
 							<p className="card__action-text">Drop</p>
 						</div>
-						<div
-							className="card__action success"
-							onClick={() => {
-								inventory.useItem(activeItem);
-								checkTheActiveItem();
-							}}
-						>
-							<p className="card__action-text">Apply</p>
-						</div>
+						{activeItem.description.isUsable ? (
+							<div
+								className="card__action success"
+								onClick={() => {
+									inventory.useItem(activeItem);
+									checkTheActiveItem();
+								}}
+							>
+								<p className="card__action-text">Apply</p>
+							</div>
+						) : (
+							""
+						)}
 					</div>
 				</div>
 			</div>
