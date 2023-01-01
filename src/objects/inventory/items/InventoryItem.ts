@@ -16,10 +16,17 @@ export default class InventoryItem extends GameObject {
 		tag: string[];
 		// is the image large or pretty much compact?
 		isLarge: boolean;
+		// some items will function as a passive effect for the player
+		isUsable: boolean;
 	};
 	effect: (owner: Player) => void;
 	use: () => boolean;
+	// apply one time effect that will end at some point
 	executeEffect: (owner: Player) => boolean;
+	// apply passive effect that will exist when player has this item in his inventory
+	applyPassiveEffect: (owner: Player) => void;
+	// clean function for the passive effects
+	clearEffect: (owner: Player) => void;
 	constructor(game: Game, left: number, top: number) {
 		super(game);
 		this.game = game;
@@ -35,9 +42,11 @@ export default class InventoryItem extends GameObject {
 			text: "No description",
 			tag: [],
 			isLarge: false,
+			isUsable: false,
 		};
 		this.id = generateKey("inv");
 		this.effect = () => {};
+		this.clearEffect = () => {};
 		// descrease amount of self and returns bool value that represents availability of this item
 		this.use = () => {
 			this.description.amount -= 1;
@@ -53,6 +62,10 @@ export default class InventoryItem extends GameObject {
 				return this.use();
 			}
 			return false;
+		};
+		this.applyPassiveEffect = (owner: Player) => {
+			this.effect(owner);
+			return true;
 		};
 	}
 
