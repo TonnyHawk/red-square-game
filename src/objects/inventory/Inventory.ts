@@ -15,10 +15,19 @@ export default class Inventory {
 	}
 	addItem(item: InventoryItem) {
 		this.items.push(item);
+		// if this item is a passive artefact
+		// apply it's effect
+		if (!item.description.isUsable) {
+			item.applyPassiveEffect(this.owner);
+		}
 		this.game.inventoryMenu.render(this.isVisible);
 	}
 	dropItem(item: InventoryItem) {
 		this.items = this.items.filter((el) => el.id !== item.id);
+		// if the item had a passive effect then delete this effect too
+		if (!item.description.isUsable) {
+			item.clearEffect(this.owner);
+		}
 		this.game.inventoryMenu.render(this.isVisible);
 		// rendering item on the game field
 		if (item.description.amount > 0) {
