@@ -1,3 +1,4 @@
+import Player from "../../basic/Player";
 import Game from "../../Game";
 import InventoryItem from "./InventoryItem";
 
@@ -12,6 +13,14 @@ export default class BulletItem extends InventoryItem {
 			text: "No gun can shot without bullet, right? Applicable to any weapon",
 			tag: ["ammo"],
 			isLarge: false,
+			isUsable: false,
+		};
+		this.effect = (owner: Player) => {
+			// apply to the owner
+			owner.gun.fullAmo += this.description.amount;
+		};
+		this.clearEffect = (owner: Player) => {
+			owner.gun.fullAmo -= this.description.amount;
 		};
 	}
 }
