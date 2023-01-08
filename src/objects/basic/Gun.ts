@@ -6,8 +6,10 @@ import Person from "./Person";
 import GunIndicator from "../indicators/GunIndicator";
 
 export default class Gun {
+	// bullets available
 	clipSize: number;
 	bulletsInClip: number;
+	fullAmo: number;
 	shotRange: number;
 	isReloading: boolean;
 	reloadingTime: {
@@ -28,6 +30,7 @@ export default class Gun {
 	constructor(game: Game, owner: Person) {
 		this.clipSize = 3;
 		this.bulletsInClip = 3;
+		this.fullAmo = 3;
 		this.shotRange = 200;
 		this.isReloading = false;
 		this.reloadingAnimation = null;
@@ -55,7 +58,16 @@ export default class Gun {
 			if (this.reloadingTime.left <= 0) {
 				this.isReloading = false;
 				this.reloadingTime.end = 0;
-				this.bulletsInClip = this.clipSize;
+
+				let restOfAmmo = this.fullAmo - this.clipSize;
+				if (restOfAmmo >= 0) {
+					this.bulletsInClip = this.clipSize;
+					this.fullAmo = restOfAmmo;
+				} else if (restOfAmmo < 0) {
+					this.bulletsInClip = this.fullAmo;
+					this.fullAmo = 0;
+				}
+
 				if (this.reloadingAnimation) {
 					cancelAnimationFrame(this.reloadingAnimation);
 					this.reloadingAnimation = null;
