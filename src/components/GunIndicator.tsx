@@ -13,13 +13,13 @@ const GunIndicator = ({ available, full, isReloading }: { available: number; ful
 				</div>
 				<div className="gun__info">
 					<div className="gun__info-property">
-						<p className="gun__info-property-name">Available</p>
+						<p className="gun__info-property-name">In clip</p>
 						<p className="gun__info-property-value" id="gun-prop-available">
 							{isReloading ? "Reloading..." : available}
 						</p>
 					</div>
 					<div className="gun__info-property">
-						<p className="gun__info-property-name">Full</p>
+						<p className="gun__info-property-name">All amo</p>
 						<p className="gun__info-property-value" id="gun-prop-full">
 							{full}
 						</p>

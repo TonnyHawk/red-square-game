@@ -18,11 +18,11 @@ export default class PlayerGunIndicator extends Indicator {
 		if (this.target.gun) {
 			// update indicator element on the page
 			const { bulletsInClip } = this.target.gun;
-			const { clipSize } = this.target.gun;
+			const { fullAmo } = this.target.gun;
 			if (!this.target.gun.isReloading) {
-				this.pageElement.render(<GunIndicator available={bulletsInClip} full={clipSize} />);
+				this.pageElement.render(<GunIndicator available={bulletsInClip} full={fullAmo} />);
 			} else {
-				this.pageElement.render(<GunIndicator available={bulletsInClip} full={clipSize} isReloading={true} />);
+				this.pageElement.render(<GunIndicator available={bulletsInClip} full={fullAmo} isReloading={true} />);
 			}
 		}
 	}
