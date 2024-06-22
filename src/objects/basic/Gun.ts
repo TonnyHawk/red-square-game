@@ -90,7 +90,11 @@ export default class Gun {
 				this.lastShotTime = now;
 			}
 		} else if (this.bulletsInClip === 0 && this.isReloading === false) {
-			this.reload();
+			if (this.fullAmo > 0) this.reload();
+			else {
+				console.log("No bullets to reload");
+				this.game.setHintText("No bullets to reload", 2000);
+			}
 		}
 	}
 }
