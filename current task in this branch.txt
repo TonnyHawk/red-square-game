@@ -1,0 +1,1 @@
+Connect the gun with bullets in inventory so the gun should use bullets from inventory
