@@ -20,11 +20,23 @@ export default class Game {
 	indicators: Indicator[];
 	popupScreen: any;
 	player: Player;
-	hintText: string;
+	hintText: {
+		value: string;
+		timer: {
+			duration: number;
+			start: number;
+		};
+	};
 	items: InventoryItem[];
 	inventoryMenu;
 	constructor() {
-		this.hintText = "Hello";
+		this.hintText = {
+			value: "",
+			timer: {
+				duration: 0,
+				start: 0,
+			},
+		};
 		this.animation = null;
 		this.isAnimationRunning = false;
 
@@ -52,6 +64,10 @@ export default class Game {
 		};
 	}
 
+	setHintText(text: string, duration?: number) {
+		this.hintText.value = text;
+	}
+
 	start() {
 		this.objects.push(this.player);
 		// this.objects.push(new Enemy(this, null, this.player));
@@ -76,7 +92,7 @@ export default class Game {
 			if (this.hintText != null) {
 				this.screen.textAlign = "center";
 				this.screen.font = "30px Arial";
-				this.screen.fillText(this.hintText, this.player.position.left + this.player.width / 2, this.player.position.top - 100);
+				this.screen.fillText(this.hintText.value, this.player.position.left + this.player.width / 2, this.player.position.top - 100);
 			}
 			// storing animation frame information
 			this.animation = requestAnimationFrame(this.draw);

@@ -126,15 +126,15 @@ export default class Player extends Person {
 			// check collisions
 			this.game.items.forEach((item: InventoryItem) => {
 				if (checkColision(item, this.visibilityRange)) {
-					this.game.hintText = "Press 'e' to pick the item";
+					this.game.setHintText("Press 'e' to pick the item");
 					this.around.add(item);
 				} else {
-					this.game.hintText = "";
+					// this.game.setHintText("");
 					this.around.remove(item);
 				}
 			});
 			if (this.game.items.length === 0) {
-				this.game.hintText = "";
+				this.game.setHintText("");
 			}
 			this.draw();
 		}
