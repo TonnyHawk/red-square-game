@@ -50,49 +50,68 @@ const InventoryComponent = ({ isActive, inventory }: { isActive: boolean; invent
 		e.preventDefault();
 		let startY = e.pageY;
 
-		if (inventoryItemsElement.current) {
+		if (inventoryItemsElement.current && scrollElement.current) {
 			const itemsListParent = inventoryItemsElement.current as HTMLElement;
 			const viewBoxHeight = parseInt(getComputedStyle(itemsListParent).height);
 
+			// Identifying list elements
 			const itemsListElement = itemsListParent.querySelector(".inventory__items-list") as HTMLElement;
 			const itemsListElementHeight = parseInt(getComputedStyle(itemsListElement).height);
 			const maximalVisibleListElementHeight = itemsListElementHeight - viewBoxHeight;
+			// Identifying custom scroll
+			const scrollEl = scrollElement.current as HTMLElement;
+			const scrollHeight = scrollEl.clientHeight;
+			const scrollThumb = scrollEl.querySelector(".scroll__thumb") as HTMLElement;
+			const scrollThumbHeight = scrollThumb.clientHeight;
+			const availableScrollWay = scrollHeight - scrollThumbHeight;
+
+			// Setting up the initial scroll position
 			if (itemsListElement.style.transform === "") {
 				itemsListElement.style.transform = `translateY(${listShiftValue}px)`;
 			}
 			let currentShift = 0;
-
-			document.onmousemove = function (dragEvent) {
+			let mouseEventTarget: HTMLElement | null = null;
+			function moveHandler(dragEvent: MouseEvent) {
 				e.preventDefault();
 				// moving the list
-				// function calculateShiftForTheList() {
 				const diff = dragEvent.pageY - startY;
-				let direction = diff > 0 ? 1 : -1;
-				const speed = 1;
-				currentShift = diff / speed + listShiftValue;
-				if (currentShift > 0) {
-					currentShift = 0;
-				} else if (makeNaturalNumber(currentShift) >= maximalVisibleListElementHeight) {
-					currentShift = maximalVisibleListElementHeight * -1;
+				if (!mouseEventTarget) {
+					mouseEventTarget = dragEvent.target as HTMLElement;
 				}
-				// }
+				function calculateShiftForListBody() {
+					const speed = 1;
+					let shift = diff / speed + listShiftValue;
+					if (shift > 0) {
+						shift = 0;
+					} else if (makeNaturalNumber(shift) >= maximalVisibleListElementHeight) {
+						shift = maximalVisibleListElementHeight * -1;
+					}
+					return shift;
+				}
+				function calculateShiftForScrollbar() {
+					const speed = 0.5;
+					let shift = (diff * -1) / speed + listShiftValue;
+					if (shift > 0) {
+						shift = 0;
+					} else if (makeNaturalNumber(shift) >= maximalVisibleListElementHeight) {
+						shift = maximalVisibleListElementHeight * -1;
+					}
+					return shift;
+				}
+				if (mouseEventTarget.closest(".inventory__items-list")) {
+					currentShift = calculateShiftForListBody();
+				} else {
+					currentShift = calculateShiftForScrollbar();
+				}
 
 				itemsListElement.style.transform = `translateY(${currentShift}px)`;
 				// itemsListParent.scrollTop = currentShift * -1;
-
 				// moving the scroll
-				if (scrollElement.current) {
-					const scrollEl = scrollElement.current as HTMLElement;
-					const scrollHeight = scrollEl.clientHeight;
-					const scrollThumb = scrollEl.querySelector(".scroll__thumb") as HTMLElement;
-					const scrollThumbHeight = scrollThumb.clientHeight;
-					const availableScrollWay = scrollHeight - scrollThumbHeight;
-					// scroll should move only down so in positive direction
-					const thumbShift = makeNaturalNumber((currentShift * availableScrollWay) / maximalVisibleListElementHeight);
+				const thumbShift = makeNaturalNumber((currentShift * availableScrollWay) / maximalVisibleListElementHeight);
 
-					scrollThumb.style.transform = `translateY(${thumbShift}px)`;
-				}
-			};
+				scrollThumb.style.transform = `translateY(${thumbShift}px)`;
+			}
+			document.onmousemove = moveHandler;
 			document.onmouseup = function (e) {
 				e.preventDefault();
 				setListShiftValue(currentShift);
