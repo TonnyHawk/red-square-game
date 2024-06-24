@@ -11,6 +11,7 @@ const InventoryComponent = ({ isActive, inventory }: { isActive: boolean; invent
 	const [searchString, setSearchString] = useState("");
 	const inventoryItemsElement = useRef(null);
 	const scrollElement = useRef(null);
+	isActive = true;
 	// falling back to the first inventory item when there is no active element defined
 	useEffect(() => {
 		if (!activeItem && items.length > 0) {
@@ -49,55 +50,56 @@ const InventoryComponent = ({ isActive, inventory }: { isActive: boolean; invent
 		e.preventDefault();
 		let startY = e.pageY;
 
-		let eventTarget = e.target;
-		const itemsListParent = eventTarget.closest(".inventory__items");
-		const viewBoxHeight = parseInt(getComputedStyle(itemsListParent).height);
+		if (inventoryItemsElement.current) {
+			const itemsListParent = inventoryItemsElement.current as HTMLElement;
+			const viewBoxHeight = parseInt(getComputedStyle(itemsListParent).height);
 
-		const itemsListElement = eventTarget.closest(".inventory__items-list");
-		const itemsListElementHeight = parseInt(getComputedStyle(itemsListElement).height);
-		const maximalVisibleListElementHeight = itemsListElementHeight - viewBoxHeight;
-		if (itemsListElement.style.transform === "") {
-			itemsListElement.style.transform = `translateY(${listShiftValue}px)`;
-		}
-		let currentShift = 0;
+			const itemsListElement = itemsListParent.querySelector(".inventory__items-list") as HTMLElement;
+			const itemsListElementHeight = parseInt(getComputedStyle(itemsListElement).height);
+			const maximalVisibleListElementHeight = itemsListElementHeight - viewBoxHeight;
+			if (itemsListElement.style.transform === "") {
+				itemsListElement.style.transform = `translateY(${listShiftValue}px)`;
+			}
+			let currentShift = 0;
 
-		document.onmousemove = function (dragEvent) {
-			e.preventDefault();
-			// moving the list
-			const diff = dragEvent.pageY - startY;
-			let direction = 0;
-			diff > 0 ? (direction = 1) : (direction = -1);
-			const speed = 1;
-			currentShift = diff / speed + listShiftValue;
-			if (currentShift <= 0 && makeNaturalNumber(currentShift) < maximalVisibleListElementHeight) {
+			document.onmousemove = function (dragEvent) {
+				e.preventDefault();
+				// moving the list
+				// function calculateShiftForTheList() {
+				const diff = dragEvent.pageY - startY;
+				let direction = diff > 0 ? 1 : -1;
+				const speed = 1;
 				currentShift = diff / speed + listShiftValue;
-			} else if (currentShift > 0) {
-				currentShift = 0;
-			} else if (makeNaturalNumber(currentShift) >= maximalVisibleListElementHeight) {
-				currentShift = maximalVisibleListElementHeight * -1;
-			}
+				if (currentShift > 0) {
+					currentShift = 0;
+				} else if (makeNaturalNumber(currentShift) >= maximalVisibleListElementHeight) {
+					currentShift = maximalVisibleListElementHeight * -1;
+				}
+				// }
 
-			itemsListElement.style.transform = `translateY(${currentShift}px)`;
+				itemsListElement.style.transform = `translateY(${currentShift}px)`;
+				// itemsListParent.scrollTop = currentShift * -1;
 
-			// moving the scroll
-			if (scrollElement.current) {
-				const scrollEl = scrollElement.current as HTMLElement;
-				const scrollHeight = scrollEl.clientHeight;
-				const scrollThumb = scrollEl.querySelector(".scroll__thumb") as HTMLElement;
-				const scrollThumbHeight = scrollThumb.clientHeight;
-				const availableScrollWay = scrollHeight - scrollThumbHeight;
-				// scroll should move only down so in positive direction
-				const thumbShift = makeNaturalNumber((currentShift * availableScrollWay) / maximalVisibleListElementHeight);
+				// moving the scroll
+				if (scrollElement.current) {
+					const scrollEl = scrollElement.current as HTMLElement;
+					const scrollHeight = scrollEl.clientHeight;
+					const scrollThumb = scrollEl.querySelector(".scroll__thumb") as HTMLElement;
+					const scrollThumbHeight = scrollThumb.clientHeight;
+					const availableScrollWay = scrollHeight - scrollThumbHeight;
+					// scroll should move only down so in positive direction
+					const thumbShift = makeNaturalNumber((currentShift * availableScrollWay) / maximalVisibleListElementHeight);
 
-				scrollThumb.style.transform = `translateY(${thumbShift}px)`;
-			}
-		};
-		document.onmouseup = function (e) {
-			e.preventDefault();
-			setListShiftValue(currentShift);
-			document.onmouseup = null;
-			document.onmousemove = null;
-		};
+					scrollThumb.style.transform = `translateY(${thumbShift}px)`;
+				}
+			};
+			document.onmouseup = function (e) {
+				e.preventDefault();
+				setListShiftValue(currentShift);
+				document.onmouseup = null;
+				document.onmousemove = null;
+			};
+		}
 	};
 	let tabBody = null;
 	if (!activeItem) {
@@ -202,7 +204,7 @@ const InventoryComponent = ({ isActive, inventory }: { isActive: boolean; invent
 						<div className="scroll__page"></div>
 						<div className="scroll__page"></div> */}
 						<div className="scroll__track"></div>
-						<div className="scroll__thumb"></div>
+						<div className="scroll__thumb" onMouseDown={(e) => itemsListDragMouseDown(e)}></div>
 					</div>
 					<div className="inventory__items grabbable" ref={inventoryItemsElement} onMouseDown={(e) => itemsListDragMouseDown(e)}>
 						<div className="inventory__items-list">{itemsToRender}</div>
