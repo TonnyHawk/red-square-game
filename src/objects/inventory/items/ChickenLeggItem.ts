@@ -14,6 +14,7 @@ export default class ChickenLeggItem extends InventoryItem {
 			tag: ["food"],
 			isLarge: true,
 			isUsable: true,
+			itemId: "456",
 		};
 		this.effect = (owner: Player) => {
 			const effectAmount = 20;

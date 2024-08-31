@@ -14,6 +14,7 @@ export default class BulletItem extends InventoryItem {
 			tag: ["ammo"],
 			isLarge: false,
 			isUsable: false,
+			itemId: "123",
 		};
 		this.effect = (owner: Player) => {
 			// apply to the owner

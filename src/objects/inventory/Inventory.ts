@@ -14,9 +14,14 @@ export default class Inventory {
 		this.isVisible = false;
 	}
 	addItem(item: InventoryItem) {
-		this.items.push(item);
+		// decide whether to increase ammount of the item
+		// or add new one completely new to the inventory
+		let presentItem = this.items.find((el) => el.description.itemId == item.description.itemId);
+		if (presentItem) {
+			presentItem.description.amount += item.description.amount;
+		} else this.items.push(item);
 		// if this item is a passive artefact
-		// apply it's effect
+		// apply effect to player
 		if (!item.description.isUsable) {
 			item.applyPassiveEffect(this.owner);
 		}

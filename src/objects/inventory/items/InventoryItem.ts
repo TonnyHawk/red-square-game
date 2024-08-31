@@ -18,6 +18,7 @@ export default class InventoryItem extends GameObject {
 		isLarge: boolean;
 		// some items will function as a passive effect for the player
 		isUsable: boolean;
+		itemId: string;
 	};
 	effect: (owner: Player) => void;
 	use: () => boolean;
@@ -43,6 +44,7 @@ export default class InventoryItem extends GameObject {
 			tag: [],
 			isLarge: false,
 			isUsable: false,
+			itemId: "",
 		};
 		this.id = generateKey("inv");
 		this.effect = () => {};
