@@ -11,7 +11,7 @@ const InventoryComponent = ({ isActive, inventory }: { isActive: boolean; invent
 	const [searchString, setSearchString] = useState("");
 	const inventoryItemsElement = useRef(null);
 	const scrollElement = useRef(null);
-	isActive = true;
+	// isActive = false;
 	// falling back to the first inventory item when there is no active element defined
 	useEffect(() => {
 		if (!activeItem && items.length > 0) {
