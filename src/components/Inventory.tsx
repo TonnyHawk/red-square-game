@@ -128,7 +128,6 @@ const InventoryComponent = ({ isActive, inventory }: { isActive: boolean; invent
 		const checkTheActiveItem = () => {
 			const index = inventory.items.findIndex((el) => el.id === activeItem.id);
 			if (index < 0 && inventory.items.length > 0) setActiveItem(inventory.items[0]);
-			else setActiveItem(null);
 		};
 		// preparing items grid
 		// shaping inventory items into html
